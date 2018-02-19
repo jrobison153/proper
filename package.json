@@ -1,0 +1,46 @@
+{
+  "name": "proper",
+  "version": "1.0.0",
+  "description": "Fair and equitable option spread calculator",
+  "main": "index.js",
+  "scripts": {
+    "lint": "node ./node_modules/eslint/bin/eslint ./src/**/*.js ./test/**/*.js",
+    "pre-commit": "npm run lint && npm test",
+    "test": "npm run test:unit && npm run test:acceptance",
+    "test:acceptance": "mocha --require babel-register --require babel-polyfill \"test/acceptance/**/*.js\"",
+    "test:acceptance:watch": "mocha --watch --require babel-register --require babel-polyfill \"test/acceptance/**/*.js\"",
+    "test:unit": "mocha --require babel-register --require babel-polyfill \"test/unit/**/*.js\"",
+    "test:unit:watch": "mocha --watch --require babel-register --require babel-polyfill \"test/unit/**/*.js\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jrobison153/proper.git"
+  },
+  "keywords": [
+    "node"
+  ],
+  "author": "Justin J. Robison",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/jrobison153/proper/issues"
+  },
+  "homepage": "https://github.com/jrobison153/proper#readme",
+  "devDependencies": {
+    "babel": "^6.23.0",
+    "babel-cli": "^6.26.0",
+    "babel-plugin-transform-async-to-generator": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-polyfill": "^6.23.0",
+    "babel-preset-env": "^1.6.0",
+    "babel-register": "^6.24.1",
+    "chai": "^4.1.2",
+    "eslint": "^4.18.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.8.0",
+    "mocha": "^5.0.1"
+  },
+  "dependencies": {
+    "cliui": "^4.0.0",
+    "csv-parse": "^2.0.4"
+  }
+}

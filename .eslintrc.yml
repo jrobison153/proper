@@ -1,0 +1,34 @@
+extends: airbnb-base
+plugins:
+  - import
+#parser: "babel-eslint"
+env:
+  node: true
+  mocha: true
+  es6: true
+globals:
+  expect: true
+rules:
+  padded-blocks: 0
+  no-console:
+    - error
+    - allow:
+      - "error"
+      - "warn"
+      - "info"
+  arrow-body-style:
+    - error
+    - "always"
+  max-len:
+    - error
+    - 120
+  no-use-before-define:
+    - error
+    - functions: false
+      classes: false
+      variables: true
+
+
+
+
+
