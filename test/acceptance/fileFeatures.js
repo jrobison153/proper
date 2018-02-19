@@ -1,6 +1,4 @@
 import { expect } from 'chai';
-import parse from 'csv-parse';
-import fs from 'fs';
 import proper from '../../src/proper';
 
 describe('fileFeatures Tests', () => {
@@ -20,6 +18,8 @@ describe('fileFeatures Tests', () => {
         expect(cliuiSpy.row[0][1].text).to.equal('Credit/Debit');
         expect(cliuiSpy.row[0][2].text).to.equal('FaE Cost');
         expect(cliuiSpy.row[0][3].text).to.equal('FaE Cost Ratio');
+        expect(cliuiSpy.row[0][4].text).to.equal('Expiration');
+        expect(cliuiSpy.row[0][5].text).to.equal('Strikes');
       });
 
       describe('and vertical PUT credit spreads found', () => {
@@ -33,7 +33,9 @@ describe('fileFeatures Tests', () => {
           expect(cliuiSpy.row[1][0].text).to.equal('Bull Put Spread');
           expect(cliuiSpy.row[1][1].text).to.equal('Credit');
           expect(cliuiSpy.row[1][2].text).to.equal('1.5');
-          expect(cliuiSpy.row[1][2].text).to.equal('2');
+          expect(cliuiSpy.row[1][3].text).to.equal('2');
+          expect(cliuiSpy.row[1][4].text).to.equal('16 MAR 18');
+          expect(cliuiSpy.row[1][5].text).to.equal('95/90');
         });
       });
     });

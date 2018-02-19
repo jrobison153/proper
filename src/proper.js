@@ -1,3 +1,5 @@
+import parseOptionData from './parser/parseOptionData';
+import bullPutSpreadFinder from './strategies/bullPutSpreadFinder';
 
 export default (cliui, dataFile) => {
 
@@ -14,10 +16,39 @@ export default (cliui, dataFile) => {
     {
       text: 'FaE Cost Ratio',
     },
+    {
+      text: 'Expiration',
+    },
+    {
+      text: 'Strikes',
+    },
   );
 
   const optionData = parseOptionData(dataFile);
 
-  cliui.div();
-  cliui.div();
+  const bullPutSpreads = bullPutSpreadFinder(optionData);
+
+  bullPutSpreads.forEach((bullPutSpread) => {
+
+    cliui.div(
+      {
+        text: 'Bull Put Spread',
+      },
+      {
+        text: bullPutSpread.creditOrDebit,
+      },
+      {
+        text: bullPutSpread.fairAndEquitableValue,
+      },
+      {
+        text: bullPutSpread.fairAndEquitableRatio,
+      },
+      {
+        text: bullPutSpread.expiration,
+      },
+      {
+        text: bullPutSpread.strikes,
+      },
+    );
+  });
 };
