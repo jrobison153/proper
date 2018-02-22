@@ -61,7 +61,9 @@ const findSpreadsFromAnchor = (shortStrike, optionData) => {
 
   const validLongStrikes = optionData.filter((longStrike) => {
 
-    return longStrike.strike < shortStrike.strike && isFairAndEquitable(shortStrike, longStrike);
+    return isCreditPotentialStrikes(shortStrike, longStrike)
+      && isFairAndEquitable(shortStrike, longStrike)
+      && isExpiringInSameMonth(shortStrike, longStrike);
   });
 
   validLongStrikes.forEach((longStrike) => {
@@ -78,4 +80,14 @@ const calculateFairAndEquitableRatio = (shortStrike, longStrike) => {
   const credit = calculateCredit(shortStrike, longStrike);
 
   return parseFloat((credit / cost).toFixed(2));
+};
+
+const isExpiringInSameMonth = (shortStrike, longStrike) => {
+
+  return longStrike.expiration === shortStrike.expiration;
+};
+
+const isCreditPotentialStrikes = (shortStrike, longStrike) => {
+
+  return longStrike.strike < shortStrike.strike;
 };

@@ -5,6 +5,7 @@ import {
   oneSpreadSiblingStrikeData,
   threeSpreadsStrikeData,
   multipleAnchorMultipleSpreadsStrikeData,
+  mixedMonthMultipleSpreadsData,
 } from './data/optionData';
 
 describe('bullPutSpreadFinder Tests', () => {
@@ -100,6 +101,15 @@ describe('bullPutSpreadFinder Tests', () => {
     it('returns the strikes field set correctly', () => {
 
       expect(bullPutSpreads[0].strikes).to.equal('165/150');
+    });
+  });
+
+  describe('given option data with different expiration months', () => {
+
+    it('does not return spreads crossing expiration months', () => {
+
+      const bullPutSpreads = bullPutSpreadFinder(mixedMonthMultipleSpreadsData);
+      expect(bullPutSpreads).to.have.lengthOf(3);
     });
   });
 });

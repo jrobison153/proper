@@ -45,13 +45,11 @@ class CliUiSpy {
 
   constructor() {
 
-    this.divCallCount = 0;
     this.row = [];
   }
 
   div(...args) {
 
     this.row.push(args);
-    this.divCallCount += 1;
   }
 }

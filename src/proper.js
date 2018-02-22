@@ -74,7 +74,7 @@ export default async (cliui, dataFile) => {
     console.log(cliui.toString());
   } catch (e) {
 
-    console.error(e);
+    console.error(`Something went wrong ${e.message}`);
     throw e;
   }
 };
