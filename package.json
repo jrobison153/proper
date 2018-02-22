@@ -9,7 +9,7 @@
   "scripts": {
     "build": "npm run clean && babel src --out-dir build",
     "clean": "rimraf build",
-    "lint": "node ./node_modules/eslint/bin/eslint ./src/**/*.js ./test/**/*.js",
+    "lint": "node ./node_modules/eslint/bin/eslint \"./src/**/*.js\" \"./test/**/*.js\"",
     "pre-commit": "npm run lint && npm test",
     "test": "npm run test:unit && npm run test:acceptance",
     "test:acceptance": "mocha --require babel-register --require babel-polyfill \"test/acceptance/**/*.js\"",

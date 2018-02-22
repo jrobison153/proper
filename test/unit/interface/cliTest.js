@@ -67,4 +67,4 @@ class ConsoleSpy {
 
     this.lastLogMessage = msg;
   }
-};
+}

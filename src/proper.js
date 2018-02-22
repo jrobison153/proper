@@ -69,6 +69,8 @@ export default async (cliui, dataFile) => {
     });
 
     cliui.div('');
+
+    // eslint-disable-next-line no-console
     console.log(cliui.toString());
   } catch (e) {
 

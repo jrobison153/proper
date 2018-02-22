@@ -1,9 +1,11 @@
 import { expect } from 'chai';
 import bullPutSpreadFinder from '../../../src/strategies/bullPutSpreadFinder';
-import { oneSpreadNonSiblingStrikeData,
+import {
+  oneSpreadNonSiblingStrikeData,
   oneSpreadSiblingStrikeData,
   threeSpreadsStrikeData,
-  multipleAnchorMultipleSpreadsStrikeData } from './data/optionData';
+  multipleAnchorMultipleSpreadsStrikeData,
+} from './data/optionData';
 
 describe('bullPutSpreadFinder Tests', () => {
 
