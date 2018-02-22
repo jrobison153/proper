@@ -6,7 +6,10 @@ export default (dataFile) => {
 
   return new Promise((resolve, reject) => {
 
-    const parser = parse({ delimiter: ',' });
+    const parser = parse({
+      delimiter: ',',
+      skip_empty_lines: true,
+    });
     const optionData = {
       calls: [],
       puts: [],
@@ -24,11 +27,15 @@ export default (dataFile) => {
         columnHeaderMap = processColumnHeaders(completeRecord);
       } else if (completeRecord.length > 0) {
 
-        const callData = buildCallDataObject(completeRecord, columnHeaderMap);
-        const putData = buildPutDataObject(completeRecord, columnHeaderMap);
+        if (completeRecord[columnHeaderMap.markCall] !== '<empty>') {
+          const callData = buildCallDataObject(completeRecord, columnHeaderMap);
+          optionData.calls.push(callData);
+        }
 
-        optionData.calls.push(callData);
-        optionData.puts.push(putData);
+        if (completeRecord[columnHeaderMap.markPut] !== '<empty>') {
+          const putData = buildPutDataObject(completeRecord, columnHeaderMap);
+          optionData.puts.push(putData);
+        }
       }
 
       lineCount += 1;
@@ -83,6 +90,7 @@ const readWholeRecord = (parser) => {
   let record;
   let completeRecord = [];
 
+  // eslint-disable-next-line no-cond-assign
   while (record = parser.read()) {
     completeRecord = completeRecord.concat(record);
   }

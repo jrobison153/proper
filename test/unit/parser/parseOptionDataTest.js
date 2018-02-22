@@ -110,4 +110,18 @@ describe('parseOptionData Tests', () => {
       });
     });
   });
+
+  describe('given csv file with <empty> fields', () => {
+
+    describe('when parsed', () => {
+
+      it('discards the any with an <empty> Mark', async () => {
+        const dataFileWithEmptyFields = require.resolve('./data/dataWithEmptyFields.csv');
+        const optionData = await parseOptionData(dataFileWithEmptyFields);
+
+        expect(optionData.calls).to.have.lengthOf(3);
+        expect(optionData.puts).to.have.lengthOf(3);
+      });
+    });
+  });
 });

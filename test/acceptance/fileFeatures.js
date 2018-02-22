@@ -7,13 +7,12 @@ describe('fileFeatures Tests', () => {
 
     describe('when scanned for fair and equitable trades', () => {
 
-      it('prints each candidate out as a row in a table with correct headers', () => {
+      it('prints each candidate out as a row in a table with correct headers', async () => {
 
         const cliuiSpy = new CliUiSpy();
+        const inputFile = require.resolve('./data/BPuSgoodData.csv');
+        await proper(cliuiSpy, inputFile);
 
-        proper(cliuiSpy);
-
-        expect(cliuiSpy.divCallCount).to.equal(3);
         expect(cliuiSpy.row[0][0].text).to.equal('Strategy');
         expect(cliuiSpy.row[0][1].text).to.equal('Credit/Debit');
         expect(cliuiSpy.row[0][2].text).to.equal('FaE Cost');
@@ -24,16 +23,16 @@ describe('fileFeatures Tests', () => {
 
       describe('and vertical PUT credit spreads found', () => {
 
-        it('prints the fields in the correct columns', () => {
+        it('prints the fields in the correct columns', async () => {
 
           const cliuiSpy = new CliUiSpy();
           const inputFile = require.resolve('./data/BPuSgoodData.csv');
-          proper(cliuiSpy, inputFile);
+          await proper(cliuiSpy, inputFile);
 
           expect(cliuiSpy.row[1][0].text).to.equal('Bull Put Spread');
-          expect(cliuiSpy.row[1][1].text).to.equal('Credit');
-          expect(cliuiSpy.row[1][2].text).to.equal('1.5');
-          expect(cliuiSpy.row[1][3].text).to.equal('2');
+          expect(cliuiSpy.row[1][1].text).to.equal('2');
+          expect(cliuiSpy.row[1][2].text).to.equal('1.6');
+          expect(cliuiSpy.row[1][3].text).to.equal('1.25');
           expect(cliuiSpy.row[1][4].text).to.equal('16 MAR 18');
           expect(cliuiSpy.row[1][5].text).to.equal('95/90');
         });
