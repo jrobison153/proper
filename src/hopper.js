@@ -23,6 +23,8 @@ export default (proper, directory) => {
             ui.div(path.basename(file, '.csv'));
 
             await proper(ui, fullPath);
+
+            ui.div('');
           }
         });
 

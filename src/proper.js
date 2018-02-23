@@ -1,5 +1,8 @@
+/* eslint-disable no-use-before-define */
 import parseOptionData from './parser/parseOptionData';
 import bullPutSpreadFinder from './strategies/bullPutSpreadFinder';
+import bearCallSpreadFinder from './strategies/bearCallSpreadFinder';
+import verticalCreditSpreadFinder from './strategies/verticalCreditSpreadFinder';
 
 const COLUMN_WIDTH = 20;
 
@@ -36,39 +39,11 @@ export default async (cliui, dataFile) => {
 
     const optionData = await parseOptionData(dataFile);
 
-    const bullPutSpreads = bullPutSpreadFinder(optionData.puts);
+    const bullPutSpreads = bullPutSpreadFinder(optionData.puts, verticalCreditSpreadFinder);
+    const bearCallSpreads = bearCallSpreadFinder(optionData.calls, verticalCreditSpreadFinder);
 
-    bullPutSpreads.forEach((bullPutSpread) => {
-
-      cliui.div(
-        {
-          text: 'Bull Put Spread',
-          width: COLUMN_WIDTH,
-        },
-        {
-          text: bullPutSpread.credit.toString(),
-          width: COLUMN_WIDTH,
-        },
-        {
-          text: bullPutSpread.fairAndEquitableCost.toString(),
-          width: COLUMN_WIDTH,
-        },
-        {
-          text: bullPutSpread.fairAndEquitableRatio.toString(),
-          width: COLUMN_WIDTH,
-        },
-        {
-          text: bullPutSpread.expiration,
-          width: COLUMN_WIDTH,
-        },
-        {
-          text: bullPutSpread.strikes,
-          width: COLUMN_WIDTH,
-        },
-      );
-    });
-
-    cliui.div('');
+    printCreditSpreads(bullPutSpreads, cliui, 'Bull Put Spread');
+    printCreditSpreads(bearCallSpreads, cliui, 'Bear Call Spread');
 
     // eslint-disable-next-line no-console
     console.log(cliui.toString());
@@ -77,4 +52,37 @@ export default async (cliui, dataFile) => {
     console.error(`Something went wrong ${e.message}`);
     throw e;
   }
+};
+
+const printCreditSpreads = (spreads, cliui, type) => {
+
+  spreads.forEach((spread) => {
+
+    cliui.div(
+      {
+        text: type,
+        width: COLUMN_WIDTH,
+      },
+      {
+        text: spread.credit.toString(),
+        width: COLUMN_WIDTH,
+      },
+      {
+        text: spread.fairAndEquitableCost.toString(),
+        width: COLUMN_WIDTH,
+      },
+      {
+        text: spread.fairAndEquitableRatio.toString(),
+        width: COLUMN_WIDTH,
+      },
+      {
+        text: spread.expiration,
+        width: COLUMN_WIDTH,
+      },
+      {
+        text: spread.strikes,
+        width: COLUMN_WIDTH,
+      },
+    );
+  });
 };

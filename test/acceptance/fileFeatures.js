@@ -37,6 +37,23 @@ describe('fileFeatures Tests', () => {
           expect(cliuiSpy.row[1][5].text).to.equal('95/90');
         });
       });
+
+      describe('and vertical Call credit spreads found', () => {
+
+        it('prints the fields in the correct columns', async () => {
+
+          const cliuiSpy = new CliUiSpy();
+          const inputFile = require.resolve('./data/BCaSgoodData.csv');
+          await proper(cliuiSpy, inputFile);
+
+          expect(cliuiSpy.row[1][0].text).to.equal('Bear Call Spread');
+          expect(cliuiSpy.row[1][1].text).to.equal('2');
+          expect(cliuiSpy.row[1][2].text).to.equal('1.6');
+          expect(cliuiSpy.row[1][3].text).to.equal('1.25');
+          expect(cliuiSpy.row[1][4].text).to.equal('16 MAR 18');
+          expect(cliuiSpy.row[1][5].text).to.equal('90/95');
+        });
+      });
     });
   });
 });

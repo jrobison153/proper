@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-expressions */
 import { expect } from 'chai';
-import bullPutSpreadFinder from '../../../src/strategies/bullPutSpreadFinder';
+import bearCallSpreadFinder from '../../../src/strategies/bearCallSpreadFinder';
 
-describe('bullPutSpreadFinder Tests', () => {
+describe('bearCallSpreadFinder Tests', () => {
 
   describe('when finding spreads', () => {
 
@@ -28,10 +28,10 @@ describe('bullPutSpreadFinder Tests', () => {
 
     it('calls the verticalCreditSpreadFinder with the correct credit strike finder function', () => {
 
-      bullPutSpreadFinder({}, verticalCreditSpreadFinderSpy);
+      bearCallSpreadFinder({}, verticalCreditSpreadFinderSpy);
 
-      const shortStrike = { strike: 30 };
-      const longStrike = { strike: 10 };
+      const shortStrike = { strike: 10 };
+      const longStrike = { strike: 30 };
 
       const strikeComparison = spiedIsCreditPotentialStrikesFunction(shortStrike, longStrike);
 
@@ -40,7 +40,7 @@ describe('bullPutSpreadFinder Tests', () => {
 
     it('returns the result of the verticalCreditSpreadFinder', () => {
 
-      const spreads = bullPutSpreadFinder({}, verticalCreditSpreadFinderSpy);
+      const spreads = bearCallSpreadFinder({}, verticalCreditSpreadFinderSpy);
       expect(spreads).to.deep.equal(expectedFoundSpreads);
     });
   });
