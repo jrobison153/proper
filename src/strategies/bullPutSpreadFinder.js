@@ -1,8 +1,8 @@
 /* eslint-disable no-use-before-define */
 
-export default (optionData, verticalCreditSpreadFinderead) => {
+export default (optionData, configuredVerticalCreditSpreadFinder) => {
 
-  return verticalCreditSpreadFinderead(optionData, isCreditPotentialStrikes);
+  return configuredVerticalCreditSpreadFinder(optionData, isCreditPotentialStrikes);
 };
 
 const isCreditPotentialStrikes = (shortStrike, longStrike) => {

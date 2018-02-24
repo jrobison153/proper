@@ -15,6 +15,46 @@ describe('verticalCreditSpreadFinder Tests', () => {
     return longStrike.strike < shortStrike.strike;
   };
 
+  describe('when options specified', () => {
+
+    it('uses the provided minimum In the Money percent', () => {
+
+      const options = {
+        minProbItmPercent: 5,
+      };
+
+      const verticalSpreads =
+        verticalCreditSpreadFinder(options)(oneSpreadNonSiblingStrikeData, isCreditPotentialStrikes);
+
+      expect(verticalSpreads).to.have.lengthOf(2);
+    });
+
+    it('uses the provided maximum In the Money percent', () => {
+
+      const options = {
+        minProbItmPercent: 50,
+        maxProbItmPercent: 75,
+      };
+
+      const verticalSpreads =
+        verticalCreditSpreadFinder(options)(oneSpreadNonSiblingStrikeData, isCreditPotentialStrikes);
+
+      expect(verticalSpreads).to.have.lengthOf(1);
+    });
+
+    it('skips the FaE check when skipFaECheck is true', () => {
+
+      const options = {
+        skipFaECheck: true,
+      };
+
+      const verticalSpreads =
+        verticalCreditSpreadFinder(options)(oneSpreadNonSiblingStrikeData, isCreditPotentialStrikes);
+
+      expect(verticalSpreads).to.have.lengthOf(2);
+    });
+  });
+
   describe('when no spreads found meeting entry criteria', () => {
 
     it('returns and empty array', () => {
@@ -26,8 +66,8 @@ describe('verticalCreditSpreadFinder Tests', () => {
         probItm: 1.5,
       }];
 
-      const bullPutSpreads = verticalCreditSpreadFinder(noSpreadsData, isCreditPotentialStrikes);
-      expect(bullPutSpreads).to.have.lengthOf(0);
+      const verticalSpreads = verticalCreditSpreadFinder()(noSpreadsData, isCreditPotentialStrikes);
+      expect(verticalSpreads).to.have.lengthOf(0);
     });
   });
 
@@ -37,9 +77,9 @@ describe('verticalCreditSpreadFinder Tests', () => {
 
       it('returns a valid trade-able spread', () => {
 
-        const bullPutSpreads = verticalCreditSpreadFinder(oneSpreadSiblingStrikeData, isCreditPotentialStrikes);
+        const verticalSpreads = verticalCreditSpreadFinder()(oneSpreadSiblingStrikeData, isCreditPotentialStrikes);
 
-        expect(bullPutSpreads).to.have.lengthOf(1);
+        expect(verticalSpreads).to.have.lengthOf(1);
       });
     });
 
@@ -47,9 +87,9 @@ describe('verticalCreditSpreadFinder Tests', () => {
 
       it('returns a valid trade-able spread', () => {
 
-        const bullPutSpreads = verticalCreditSpreadFinder(oneSpreadNonSiblingStrikeData, isCreditPotentialStrikes);
+        const verticalSpreads = verticalCreditSpreadFinder()(oneSpreadNonSiblingStrikeData, isCreditPotentialStrikes);
 
-        expect(bullPutSpreads).to.have.lengthOf(1);
+        expect(verticalSpreads).to.have.lengthOf(1);
       });
     });
 
@@ -57,9 +97,9 @@ describe('verticalCreditSpreadFinder Tests', () => {
 
       it('returns all valid spreads', () => {
 
-        const bullPutSpreads = verticalCreditSpreadFinder(threeSpreadsStrikeData, isCreditPotentialStrikes);
+        const verticalSpreads = verticalCreditSpreadFinder()(threeSpreadsStrikeData, isCreditPotentialStrikes);
 
-        expect(bullPutSpreads).to.have.lengthOf(3);
+        expect(verticalSpreads).to.have.lengthOf(3);
       });
     });
   });
@@ -68,45 +108,65 @@ describe('verticalCreditSpreadFinder Tests', () => {
 
     it('all valid spread combinations', () => {
 
-      const bullPutSpreads =
-        verticalCreditSpreadFinder(multipleAnchorMultipleSpreadsStrikeData, isCreditPotentialStrikes);
+      const verticalSpreads =
+        verticalCreditSpreadFinder()(multipleAnchorMultipleSpreadsStrikeData, isCreditPotentialStrikes);
 
-      expect(bullPutSpreads).to.have.lengthOf(7);
+      expect(verticalSpreads).to.have.lengthOf(7);
     });
   });
 
   describe('when valid trade-able spread found', () => {
 
-    let bullPutSpreads;
+    let verticalSpreads;
 
     before(() => {
-      bullPutSpreads = verticalCreditSpreadFinder(oneSpreadSiblingStrikeData, isCreditPotentialStrikes);
+      verticalSpreads = verticalCreditSpreadFinder()(oneSpreadSiblingStrikeData, isCreditPotentialStrikes);
     });
 
     it('returns the fairAndEquitableValue field set correctly', () => {
 
-      expect(bullPutSpreads[0].fairAndEquitableCost).to.equal(4.5);
+      expect(verticalSpreads[0].fairAndEquitableCost).to.equal(4.5);
     });
 
     it('returns the credit field set correctly', () => {
 
-      expect(bullPutSpreads[0].credit).to.equal(8);
+      expect(verticalSpreads[0].credit).to.equal(8);
     });
 
     it('returns the fairAndEquitableRatio field set correctly', () => {
 
       const expectedRatio = parseFloat((8 / 4.5).toFixed(2));
-      expect(bullPutSpreads[0].fairAndEquitableRatio).to.equal(expectedRatio);
+      expect(verticalSpreads[0].fairAndEquitableRatio).to.equal(expectedRatio);
     });
 
     it('returns the expiration field set correctly', () => {
 
-      expect(bullPutSpreads[0].expiration).to.equal('16 MAR 18');
+      expect(verticalSpreads[0].expiration).to.equal('16 MAR 18');
     });
 
     it('returns the strikes field set correctly', () => {
 
-      expect(bullPutSpreads[0].strikes).to.equal('165/150');
+      expect(verticalSpreads[0].strikes).to.equal('165/150');
+    });
+
+    it('returns the anchor strike probability ITM field set correctly', () => {
+
+      expect(verticalSpreads[0].anchorStrikeProbItm).to.equal(30.00);
+    });
+
+    it('returns the width of strikes field set correctly', () => {
+
+      expect(verticalSpreads[0].strikeWidth).to.equal(15);
+    });
+
+    it('returns the risk of a single contract', () => {
+
+      expect(verticalSpreads[0].risk).to.equal(15);
+    });
+
+    it('returns the reward risk ratio of a single contract', () => {
+
+      expect(verticalSpreads[0].rewardRiskRatio).to.equal(.53);
     });
   });
 
@@ -114,8 +174,8 @@ describe('verticalCreditSpreadFinder Tests', () => {
 
     it('does not return spreads crossing expiration months', () => {
 
-      const bullPutSpreads = verticalCreditSpreadFinder(mixedMonthMultipleSpreadsData, isCreditPotentialStrikes);
-      expect(bullPutSpreads).to.have.lengthOf(3);
+      const verticalSpreads = verticalCreditSpreadFinder()(mixedMonthMultipleSpreadsData, isCreditPotentialStrikes);
+      expect(verticalSpreads).to.have.lengthOf(3);
     });
   });
 });

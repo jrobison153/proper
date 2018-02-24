@@ -1,8 +1,11 @@
 /* eslint-disable no-use-before-define */
+import arraySort from'array-sort';
+
 import parseOptionData from './parser/parseOptionData';
 import bullPutSpreadFinder from './strategies/bullPutSpreadFinder';
 import bearCallSpreadFinder from './strategies/bearCallSpreadFinder';
 import verticalCreditSpreadFinder from './strategies/verticalCreditSpreadFinder';
+import ironCondorFinder from './strategies/ironCondorFinder';
 
 const COLUMN_WIDTH = 20;
 
@@ -15,6 +18,14 @@ export default async (cliui, dataFile) => {
     },
     {
       text: 'Credit/Debit',
+      width: COLUMN_WIDTH,
+    },
+    {
+      text: 'Risk',
+      width: COLUMN_WIDTH,
+    },
+    {
+      text: 'Reward/Risk Ratio',
       width: COLUMN_WIDTH,
     },
     {
@@ -39,11 +50,27 @@ export default async (cliui, dataFile) => {
 
     const optionData = await parseOptionData(dataFile);
 
-    const bullPutSpreads = bullPutSpreadFinder(optionData.puts, verticalCreditSpreadFinder);
-    const bearCallSpreads = bearCallSpreadFinder(optionData.calls, verticalCreditSpreadFinder);
+    let bullPutSpreads = bullPutSpreadFinder(optionData.puts, verticalCreditSpreadFinder());
+    let bearCallSpreads = bearCallSpreadFinder(optionData.calls, verticalCreditSpreadFinder());
+    let fullCreditIronCondors =
+      ironCondorFinder(optionData, bearCallSpreadFinder, bullPutSpreadFinder, verticalCreditSpreadFinder);
+    let ironCondors = ironCondorFinder(
+      optionData,
+      bearCallSpreadFinder,
+      bullPutSpreadFinder,
+      verticalCreditSpreadFinder,
+      { isNormalIronCondor: true },
+    );
+
+    bullPutSpreads = arraySort(bullPutSpreads, 'rewardRiskRatio', { reverse: true });
+    bearCallSpreads = arraySort(bearCallSpreads, 'rewardRiskRatio', { reverse: true });
+    fullCreditIronCondors = arraySort(fullCreditIronCondors, 'rewardRiskRatio', { reverse: true });
+    ironCondors = arraySort(ironCondors, 'rewardRiskRatio', { reverse: true });
 
     printCreditSpreads(bullPutSpreads, cliui, 'Bull Put Spread');
     printCreditSpreads(bearCallSpreads, cliui, 'Bear Call Spread');
+    printCreditSpreads(ironCondors, cliui, 'Iron Condor');
+    printCreditSpreads(fullCreditIronCondors, cliui, 'Full Credit Iron Condor');
 
     // eslint-disable-next-line no-console
     console.log(cliui.toString());
@@ -65,6 +92,14 @@ const printCreditSpreads = (spreads, cliui, type) => {
       },
       {
         text: spread.credit.toString(),
+        width: COLUMN_WIDTH,
+      },
+      {
+        text: spread.risk.toString(),
+        width: COLUMN_WIDTH,
+      },
+      {
+        text: spread.rewardRiskRatio.toString(),
         width: COLUMN_WIDTH,
       },
       {

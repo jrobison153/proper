@@ -46,6 +46,7 @@
     "rimraf": "^2.6.2"
   },
   "dependencies": {
+    "array-sort": "^1.0.0",
     "babel-polyfill": "^6.23.0",
     "cliui": "^4.0.0",
     "csv-parse": "^2.0.4",

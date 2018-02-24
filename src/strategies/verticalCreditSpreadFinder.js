@@ -7,46 +7,67 @@ import {
 const MIN_PROBABILITY_ITM = 27.00;
 const MAX_PROBABILITY_ITM = 34.00;
 
-export default (optionData, isCreditPotentialStrikes) => {
+export default (options) => {
 
-  const anchorStrikeOptions = optionData.filter((option) => {
+  return (optionData, isCreditPotentialStrikes) => {
 
-    return option.probItm > MIN_PROBABILITY_ITM && option.probItm < MAX_PROBABILITY_ITM;
-  });
+    let minimumItmPercent = MIN_PROBABILITY_ITM;
+    let maximumItmPercent = MAX_PROBABILITY_ITM;
+    let skippingFaeCheck = false;
 
-  let allFormattedSpreads = [];
-  if (anchorStrikeOptions.length > 0) {
+    if (options) {
 
-    anchorStrikeOptions.forEach((shortStrike) => {
+      minimumItmPercent = options.minProbItmPercent || MIN_PROBABILITY_ITM;
+      maximumItmPercent = options.maxProbItmPercent || MAX_PROBABILITY_ITM;
+      skippingFaeCheck = options.skipFaECheck || false;
+    }
 
-      const spreads = findSpreadsFromAnchor(shortStrike, optionData, isCreditPotentialStrikes);
+    const anchorStrikeOptions = optionData.filter((option) => {
 
-      const formattedSpreads = spreads.map((longSpreadStrike) => {
-
-        return {
-          credit: calculateCredit(shortStrike, longSpreadStrike),
-          expiration: shortStrike.expiration,
-          fairAndEquitableCost: fairAndEquitableCost(shortStrike, longSpreadStrike),
-          fairAndEquitableRatio: calculateFairAndEquitableRatio(shortStrike, longSpreadStrike),
-          strikes: `${shortStrike.strike}/${longSpreadStrike.strike}`,
-        };
-      });
-
-      allFormattedSpreads = [...allFormattedSpreads, ...formattedSpreads];
+      return option.probItm > minimumItmPercent && option.probItm < maximumItmPercent;
     });
-  }
 
-  return allFormattedSpreads;
+    let allFormattedSpreads = [];
+    if (anchorStrikeOptions.length > 0) {
+
+      anchorStrikeOptions.forEach((shortStrikeOption) => {
+
+        const spreads =
+          findSpreadsFromAnchor(shortStrikeOption, optionData, isCreditPotentialStrikes, skippingFaeCheck);
+
+        const formattedSpreads = spreads.map((longStrikeOption) => {
+
+          const credit = calculateCredit(shortStrikeOption, longStrikeOption);
+          const risk = Math.abs(shortStrikeOption.strike - longStrikeOption.strike);
+          return {
+            anchorStrikeProbItm: shortStrikeOption.probItm,
+            credit,
+            expiration: shortStrikeOption.expiration,
+            fairAndEquitableCost: fairAndEquitableCost(shortStrikeOption, longStrikeOption),
+            fairAndEquitableRatio: calculateFairAndEquitableRatio(shortStrikeOption, longStrikeOption),
+            rewardRiskRatio: parseFloat((credit / risk).toFixed(2)),
+            risk,
+            strikes: `${shortStrikeOption.strike}/${longStrikeOption.strike}`,
+            strikeWidth: Math.abs(shortStrikeOption.strike - longStrikeOption.strike),
+          };
+        });
+
+        allFormattedSpreads = [...allFormattedSpreads, ...formattedSpreads];
+      });
+    }
+
+    return allFormattedSpreads;
+  };
 };
 
-const findSpreadsFromAnchor = (shortStrike, optionData, isCreditPotentialStrikes) => {
+const findSpreadsFromAnchor = (shortStrike, optionData, isCreditPotentialStrikes, isSkippingFaECheck) => {
 
   let allBullPutSpreads = [];
 
   const validLongStrikes = optionData.filter((longStrike) => {
 
     return isCreditPotentialStrikes(shortStrike, longStrike)
-      && isFairAndEquitable(shortStrike, longStrike)
+      && (isSkippingFaECheck || isFairAndEquitable(shortStrike, longStrike))
       && isExpiringInSameMonth(shortStrike, longStrike);
   });
 

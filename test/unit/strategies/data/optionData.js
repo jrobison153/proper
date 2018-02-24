@@ -28,6 +28,12 @@ export const oneSpreadNonSiblingStrikeData = [{
   strike: 165,
   mark: 10.5,
   expiration: '16 MAR 18',
+},
+{
+  probItm: 70.00,
+  strike: 170,
+  mark: 15.5,
+  expiration: '16 MAR 18',
 }];
 
 export const threeSpreadsStrikeData = [{

@@ -19,16 +19,19 @@ describe('bearCallSpreadFinder Tests', () => {
 
       spiedIsCreditPotentialStrikesFunction;
 
-      verticalCreditSpreadFinderSpy = (data, isCreditPotentialStrikes) => {
+      verticalCreditSpreadFinderSpy = () => {
 
-        spiedIsCreditPotentialStrikesFunction = isCreditPotentialStrikes;
-        return expectedFoundSpreads;
-      };
+        return (data, isCreditPotentialStrikes) => {
+
+          spiedIsCreditPotentialStrikesFunction = isCreditPotentialStrikes;
+          return expectedFoundSpreads;
+        };
+      }
     });
 
     it('calls the verticalCreditSpreadFinder with the correct credit strike finder function', () => {
 
-      bearCallSpreadFinder({}, verticalCreditSpreadFinderSpy);
+      bearCallSpreadFinder({}, verticalCreditSpreadFinderSpy());
 
       const shortStrike = { strike: 10 };
       const longStrike = { strike: 30 };
@@ -40,7 +43,7 @@ describe('bearCallSpreadFinder Tests', () => {
 
     it('returns the result of the verticalCreditSpreadFinder', () => {
 
-      const spreads = bearCallSpreadFinder({}, verticalCreditSpreadFinderSpy);
+      const spreads = bearCallSpreadFinder({}, verticalCreditSpreadFinderSpy());
       expect(spreads).to.deep.equal(expectedFoundSpreads);
     });
   });
