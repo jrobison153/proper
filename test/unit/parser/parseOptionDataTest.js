@@ -124,4 +124,49 @@ describe('parseOptionData Tests', () => {
       });
     });
   });
+
+  describe('given csv file with numbers represented as quoted strings', () => {
+
+    let optionData;
+
+    beforeEach(async () => {
+
+      const dataFileWithQuotedNumbers = require.resolve('./data/dataWithQuotedNumberFields.csv');
+
+      optionData = await parseOptionData(dataFileWithQuotedNumbers);
+    });
+
+    describe('when parsed', () => {
+
+      it('correctly parses the call open interest string into a number', () => {
+
+        expect(optionData.calls[0].openInterest).to.equal(1230);
+      });
+
+      it('correctly parses the call volume string into a number', () => {
+
+        expect(optionData.calls[0].volume).to.equal(1001);
+      });
+
+      it('correctly parses the call mark string into a number', () => {
+
+        expect(optionData.calls[0].mark).to.equal(1353.90);
+      });
+
+      it('correctly parses the put open interest string into a number', () => {
+
+        expect(optionData.puts[0].openInterest).to.equal(2700);
+      });
+
+      it('correctly parses the put volume string into a number', () => {
+
+        expect(optionData.puts[0].volume).to.equal(1110);
+      });
+
+      it('correctly parses the put mark string into a number', () => {
+
+        expect(optionData.puts[0].mark).to.equal(1000.30);
+      });
+    });
+  });
 });

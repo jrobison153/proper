@@ -6,6 +6,7 @@ import {
   threeSpreadsStrikeData,
   multipleAnchorMultipleSpreadsStrikeData,
   mixedMonthMultipleSpreadsData,
+  lowOpenInterestSpreadsData,
 } from './data/optionData';
 
 describe('verticalCreditSpreadFinder Tests', () => {
@@ -106,7 +107,7 @@ describe('verticalCreditSpreadFinder Tests', () => {
 
   describe('given multiple valid anchor strikes', () => {
 
-    it('all valid spread combinations', () => {
+    it('returns all valid spread combinations', () => {
 
       const verticalSpreads =
         verticalCreditSpreadFinder()(multipleAnchorMultipleSpreadsStrikeData, isCreditPotentialStrikes);
@@ -166,7 +167,7 @@ describe('verticalCreditSpreadFinder Tests', () => {
 
     it('returns the reward risk ratio of a single contract', () => {
 
-      expect(verticalSpreads[0].rewardRiskRatio).to.equal(.53);
+      expect(verticalSpreads[0].rewardRiskRatio).to.equal(0.53);
     });
   });
 
@@ -176,6 +177,15 @@ describe('verticalCreditSpreadFinder Tests', () => {
 
       const verticalSpreads = verticalCreditSpreadFinder()(mixedMonthMultipleSpreadsData, isCreditPotentialStrikes);
       expect(verticalSpreads).to.have.lengthOf(3);
+    });
+  });
+
+  describe('when option has too open interest', () => {
+
+    it('does not return spreads', () => {
+
+      const verticalSpreads = verticalCreditSpreadFinder()(lowOpenInterestSpreadsData, isCreditPotentialStrikes);
+      expect(verticalSpreads).to.have.lengthOf(0);
     });
   });
 });

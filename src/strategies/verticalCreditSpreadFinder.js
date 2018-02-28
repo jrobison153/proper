@@ -4,8 +4,9 @@ import {
   isExpiringInSameMonth, calculateFairAndEquitableRatio,
 } from '../calc/verticalSpreadCheck';
 
-const MIN_PROBABILITY_ITM = 27.00;
-const MAX_PROBABILITY_ITM = 34.00;
+const MIN_PROBABILITY_ITM = 23.00;
+const MAX_PROBABILITY_ITM = 35.00;
+const MIN_OPEN_INTEREST = 100;
 
 export default (options) => {
 
@@ -24,7 +25,9 @@ export default (options) => {
 
     const anchorStrikeOptions = optionData.filter((option) => {
 
-      return option.probItm > minimumItmPercent && option.probItm < maximumItmPercent;
+      return option.probItm > minimumItmPercent
+        && option.probItm < maximumItmPercent
+        && option.openInterest >= MIN_OPEN_INTEREST;
     });
 
     let allFormattedSpreads = [];
@@ -66,9 +69,15 @@ const findSpreadsFromAnchor = (shortStrike, optionData, isCreditPotentialStrikes
 
   const validLongStrikes = optionData.filter((longStrike) => {
 
-    return isCreditPotentialStrikes(shortStrike, longStrike)
-      && (isSkippingFaECheck || isFairAndEquitable(shortStrike, longStrike))
-      && isExpiringInSameMonth(shortStrike, longStrike);
+    const hasCredit = isCreditPotentialStrikes(shortStrike, longStrike);
+    const hasFairAndEquitableChance = (isSkippingFaECheck || isFairAndEquitable(shortStrike, longStrike));
+    const optionsHaveSameExpiration = isExpiringInSameMonth(shortStrike, longStrike);
+    const longStrikeHasEnoughOpenInterest = longStrike.openInterest >= MIN_OPEN_INTEREST;
+
+    return hasCredit
+      && hasFairAndEquitableChance
+      && optionsHaveSameExpiration
+      && longStrikeHasEnoughOpenInterest;
   });
 
   validLongStrikes.forEach((longStrike) => {

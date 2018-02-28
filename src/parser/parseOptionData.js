@@ -56,33 +56,32 @@ export default (dataFile) => {
 };
 
 const buildCallDataObject = (completeRecord, columnHeaderMap) => {
-  const probItmVal = completeRecord[columnHeaderMap.probItmCall];
 
-  const callData = {
-    probItm: Number.parseFloat(probItmVal.substr(0, probItmVal.length - 1)),
-    openInterest: Number.parseInt(completeRecord[columnHeaderMap.openInterestCall], 10),
-    volume: Number.parseInt(completeRecord[columnHeaderMap.volumeCall], 10),
-    mark: Number.parseFloat(completeRecord[columnHeaderMap.markCall]),
-    expiration: completeRecord[columnHeaderMap.expiration],
-    strike: parseFloat(completeRecord[columnHeaderMap.strike]),
-  };
-
-  return callData;
+  return buildOptionDataObject(completeRecord, columnHeaderMap, 'Call');
 };
 
 const buildPutDataObject = (completeRecord, columnHeaderMap) => {
-  const probItmVal = completeRecord[columnHeaderMap.probItmPut];
 
-  const putData = {
+  return buildOptionDataObject(completeRecord, columnHeaderMap, 'Put');
+};
+
+const buildOptionDataObject = (completeRecord, columnHeaderMap, type) => {
+
+  const probItmVal = completeRecord[columnHeaderMap[`probItm${type}`]];
+  const openInterest = convertPossibleStringToBase10Number(completeRecord[columnHeaderMap[`openInterest${type}`]]);
+  const volume = convertPossibleStringToBase10Number(completeRecord[columnHeaderMap[`volume${type}`]]);
+  const mark = convertPossibleStringToFloat(completeRecord[columnHeaderMap[`mark${type}`]]);
+
+  const optonData = {
     probItm: Number.parseFloat(probItmVal.substr(0, probItmVal.length - 1)),
-    openInterest: Number.parseInt(completeRecord[columnHeaderMap.openInterestPut], 10),
-    volume: Number.parseInt(completeRecord[columnHeaderMap.volumePut], 10),
-    mark: Number.parseFloat(completeRecord[columnHeaderMap.markPut]),
+    openInterest,
+    volume,
+    mark,
     expiration: completeRecord[columnHeaderMap.expiration],
     strike: parseFloat(completeRecord[columnHeaderMap.strike]),
   };
 
-  return putData;
+  return optonData;
 };
 
 const readWholeRecord = (parser) => {
@@ -121,3 +120,31 @@ const processColumnHeaders = (completeRecord) => {
   return columnHeaderMap;
 };
 
+const convertPossibleStringToBase10Number = (numberPossiblyAsString) => {
+
+  let numberAsStringNoCommas = numberPossiblyAsString;
+
+  if (typeof numberPossiblyAsString === 'string') {
+
+    numberAsStringNoCommas = numberPossiblyAsString.replace(',', '');
+  }
+
+  const theNumber = Number.parseInt(numberAsStringNoCommas, 10);
+
+  return theNumber;
+};
+
+const convertPossibleStringToFloat = (floatPossiblyAsString) => {
+
+  let floatAsStringNoCommas = floatPossiblyAsString;
+
+  if (typeof floatPossiblyAsString === 'string') {
+
+    floatAsStringNoCommas = floatPossiblyAsString.replace(',', '');
+  }
+
+  let theNumber = Number.parseFloat(floatAsStringNoCommas);
+
+  return theNumber;
+
+};
