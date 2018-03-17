@@ -199,7 +199,7 @@ describe('ironCondorFinder Tests', () => {
 
     it('returns the fair and equitable ratio', () => {
 
-      expect(spreads[0].fairAndEquitableRatio).to.equal(1.17);
+      expect(spreads[0].fairAndEquitableRatio).to.equal(1);
     });
 
     it('returns the strikes', () => {
@@ -207,9 +207,9 @@ describe('ironCondorFinder Tests', () => {
       expect(spreads[0].strikes).to.equal('55/60/50/45');
     });
 
-    it('returns the fair and equitable cost of the call side leg of the trade', () => {
+    it('returns the fair and equitable cost of the trade', () => {
 
-      expect(spreads[0].fairAndEquitableCost).to.equal(3);
+      expect(spreads[0].fairAndEquitableCost).to.equal(3.50);
     });
 
     it('returns the risk of the trade per contract sold', () => {

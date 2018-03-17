@@ -14,17 +14,9 @@ export const filterValidIronCondors = (anchorSpread, testSpreads) => {
 
 export const calculateFairAndEquitableCost = (callSpread, putSpread) => {
 
-  let cost;
+  const faeCost = callSpread.fairAndEquitableCost + putSpread.fairAndEquitableCost;
 
-  if (callSpread.fairAndEquitableCost > putSpread.fairAndEquitableCost) {
-
-    cost = callSpread.fairAndEquitableCost;
-  } else {
-
-    cost = putSpread.fairAndEquitableCost;
-  }
-
-  return cost;
+  return parseFloat(faeCost.toFixed(2));
 };
 
 export const calculateMaxRisk = (callSpread, putSpread) => {

@@ -75,8 +75,8 @@ describe('fileFeatures Tests', () => {
           expect(firstFullCreditIronCondor[1].text).to.equal('4');
           expect(firstFullCreditIronCondor[2].text).to.equal('5');
           expect(firstFullCreditIronCondor[3].text).to.equal('0.8');
-          expect(firstFullCreditIronCondor[4].text).to.equal('0.75');
-          expect(firstFullCreditIronCondor[5].text).to.equal('5.33');
+          expect(firstFullCreditIronCondor[4].text).to.equal('1.43');
+          expect(firstFullCreditIronCondor[5].text).to.equal('2.8');
           expect(firstFullCreditIronCondor[6].text).to.equal('16 MAR 18');
           expect(firstFullCreditIronCondor[7].text).to.equal('90/95/95/90');
         });
@@ -96,8 +96,8 @@ describe('fileFeatures Tests', () => {
           expect(firstIronCondor[1].text).to.equal('2.25');
           expect(firstIronCondor[2].text).to.equal('5');
           expect(firstIronCondor[3].text).to.equal('0.45');
-          expect(firstIronCondor[4].text).to.equal('0.75');
-          expect(firstIronCondor[5].text).to.equal('3');
+          expect(firstIronCondor[4].text).to.equal('1.43');
+          expect(firstIronCondor[5].text).to.equal('1.57');
           expect(firstIronCondor[6].text).to.equal('16 MAR 18');
           expect(firstIronCondor[7].text).to.equal('90/95/95/90');
         });
