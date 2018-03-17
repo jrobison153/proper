@@ -143,7 +143,7 @@ const convertPossibleStringToFloat = (floatPossiblyAsString) => {
     floatAsStringNoCommas = floatPossiblyAsString.replace(',', '');
   }
 
-  let theNumber = Number.parseFloat(floatAsStringNoCommas);
+  const theNumber = Number.parseFloat(floatAsStringNoCommas);
 
   return theNumber;
 

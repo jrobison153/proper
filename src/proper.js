@@ -1,5 +1,5 @@
 /* eslint-disable no-use-before-define */
-import arraySort from'array-sort';
+import arraySort from 'array-sort';
 
 import parseOptionData from './parser/parseOptionData';
 import bullPutSpreadFinder from './strategies/bullPutSpreadFinder';

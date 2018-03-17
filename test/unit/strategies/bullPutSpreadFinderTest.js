@@ -26,7 +26,7 @@ describe('bullPutSpreadFinder Tests', () => {
           spiedIsCreditPotentialStrikesFunction = isCreditPotentialStrikes;
           return expectedFoundSpreads;
         };
-      }
+      };
     });
 
     it('calls the verticalCreditSpreadFinder with the correct credit strike finder function', () => {
