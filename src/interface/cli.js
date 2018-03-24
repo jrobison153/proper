@@ -14,7 +14,7 @@ export default (hopper, console) => {
   } else {
 
     returnCode = 1;
-    console.log('Basic Usage: proper --data-dir');
+    console.log('Basic Usage: oa-proper --data-dir');
   }
   return returnCode;
 };

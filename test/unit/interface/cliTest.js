@@ -33,7 +33,7 @@ describe('cli Tests', () => {
 
     it('prints basic usage to the console', () => {
 
-      expect(consoleSpy.lastLogMessage).to.match(/.*Basic Usage: proper.*/);
+      expect(consoleSpy.lastLogMessage).to.match(/.*Basic Usage: oa-proper.*/);
     });
   });
 
