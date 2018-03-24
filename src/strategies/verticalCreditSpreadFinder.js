@@ -6,7 +6,7 @@ import {
 
 const MIN_PROBABILITY_ITM = 23.00;
 const MAX_PROBABILITY_ITM = 35.00;
-const MIN_OPEN_INTEREST = 100;
+const MIN_OPEN_INTEREST = 500;
 
 export default (options) => {
 
