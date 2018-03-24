@@ -2,7 +2,7 @@
   "name": "oa-proper",
   "version": "1.3.0",
   "bin": {
-    "proper": "./build/bin/proper-hopper.js"
+    "oa-proper": "./build/bin/proper-hopper.js"
   },
   "description": "Fair and equitable option spread calculator",
   "main": "index.js",
