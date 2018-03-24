@@ -11,6 +11,8 @@
     "clean": "rimraf build",
     "lint": "node ./node_modules/eslint/bin/eslint \"./src/**/*.js\" \"./test/**/*.js\"",
     "pre-commit": "npm run lint && npm test",
+    "release:minor": "npm run test && npm run build && npm version minor && npm publish",
+    "release:major": "npm run test && npm run build && npm version major && npm publish",
     "test": "npm run test:unit && npm run test:acceptance",
     "test:acceptance": "mocha --require babel-register --require babel-polyfill \"test/acceptance/**/*.js\"",
     "test:acceptance:watch": "mocha --watch --require babel-register --require babel-polyfill \"test/acceptance/**/*.js\"",
