@@ -180,7 +180,7 @@ describe('verticalCreditSpreadFinder Tests', () => {
     });
   });
 
-  describe('when option has too open interest', () => {
+  describe('when option has too little open interest', () => {
 
     it('does not return spreads', () => {
 
